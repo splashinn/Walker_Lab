@@ -1,44 +1,28 @@
-var leftBorder = 400;
-var rightBorder = 700;
+var leftBorder = 200;
+var rightBorder = 1000;
 
-var theWalker = null;
-var goingLeft = true;
+var walkingLeft = true;
+var xPos = rightBorder;
 
-function init() {
-	goingLeft = true;
-	theWalker = document.getElementById('img');
-	theWalker.style.left = rightBorder + 'px';
-	var nIntervId = setInterval(moveBackAndForth, 50);
-}
+var walk = function() {
+	var img = document.getElementById('img');
 
-function moveRight() {
-	theWalker.style.left = parseInt(theWalker.style.left) - 5 + 'px';
-}
+	// walk 5 pixPosel
+	walkingLeft ? xPos -= 5 : xPos += 5;
+	img.style.left = xPos + "px";
 
-function turn() {
-	if (goingLeft) {
-		goingLeft = false;
-		theWalker.setAttribute('class', 'flip-img');
-	} else {
-		goingLeft = true;
-		theWalker.removeAttribute('class', 'flip-img');
+	// Turn around if when you've crossed hit the border
+	if (xPos > rightBorder || xPos < leftBorder) {
+		img.classList.toggle("flip-img");
+		walkingLeft = !walkingLeft;
 	}
-}
 
-function moveBackAndForth() {
-	if (goingLeft) {
-		if (parseInt(theWalker.style.left) > leftBorder) {
-			moveLeft();
-		} else {
-			turn();
-		}
-	} else {
-		if (parseInt(theWalker.style.left) < rightBorder) {
-			moveRight();
-		} else {
-			turn();
-		}
-	}
-}
+};
 
-window.onload = init;
+setInterval(walk, 100);
+
+var img = document.getElementById('img');
+img.addEventListener('click', function(){
+	img.classList.toggle("flip-img");
+	walkingLeft = !walkingLeft;
+});
